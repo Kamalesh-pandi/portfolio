@@ -153,6 +153,7 @@ const Modal = ({ item, onClose }) => {
 function App() {
   const [loading, setLoading] = useState(true);
   const [selectedItem, setSelectedItem] = useState(null);
+  const [menuOpen, setMenuOpen] = useState(false);
   const [data, setData] = useState({
     profile: {},
     skills: [],
@@ -161,6 +162,19 @@ function App() {
     awards: []
   });
   const observerRef = useRef(null);
+  const carouselRef = useRef(null);
+
+  const closeMenu = () => setMenuOpen(false);
+
+  const scroll = (direction) => {
+    if (carouselRef.current) {
+      const scrollAmount = 400;
+      carouselRef.current.scrollBy({
+        left: direction === 'left' ? -scrollAmount : scrollAmount,
+        behavior: 'smooth'
+      });
+    }
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -234,13 +248,35 @@ function App() {
           <li><a href="#awards">Awards</a></li>
           <li><a href="#contact">Contact</a></li>
         </ul>
+        <button
+          className={`menu-toggle ${menuOpen ? 'open' : ''}`}
+          onClick={() => setMenuOpen(prev => !prev)}
+          aria-label="Toggle navigation"
+          aria-expanded={menuOpen}
+        >
+          <span className="hamburger-bar" />
+          <span className="hamburger-bar" />
+          <span className="hamburger-bar" />
+        </button>
       </nav>
+
+      {/* Mobile Menu Overlay */}
+      <div className={`mobile-menu ${menuOpen ? 'mobile-menu--open' : ''}`}>
+        <ul className="mobile-nav-links">
+          <li><a href="#hero" onClick={closeMenu}>About</a></li>
+          <li><a href="#resume" onClick={closeMenu}>Resume</a></li>
+          <li><a href="#projects" onClick={closeMenu}>Work</a></li>
+          <li><a href="#skills" onClick={closeMenu}>Skills</a></li>
+          <li><a href="#awards" onClick={closeMenu}>Awards</a></li>
+          <li><a href="#contact" onClick={closeMenu}>Contact</a></li>
+        </ul>
+      </div>
 
       {/* 1. Introduction / About Me */}
       <section id="hero" className="hero-section">
         <div className="container">
           <div className="hero-content reveal">
-            <span className="hero-tag">Flutter Developer</span>
+            <span className="hero-tag">{profile.role}</span>
             <h1 className="hero-name">
               S Kamalesh<br />
               <span className="gradient-text">pandi</span>
@@ -257,7 +293,7 @@ function App() {
           <div className="hero-visual reveal">
             <div className="floating-card">
               <div className="card-avatar">
-                <img src={profileImg} alt="S Kamaleshpandi" className="avatar-img-hero" />
+                <img src={profile.imageUrl || profileImg} alt="S Kamaleshpandi" className="avatar-img-hero" />
               </div>
               <div className="card-info">
                 <h3>{profile.role}</h3>
@@ -315,7 +351,7 @@ function App() {
           <h2 className="section-title reveal">Featured Projects</h2>
           <div className="projects-grid">
             {projects.map((proj, idx) => (
-              <div key={idx} className="project-card reveal" onClick={() => setSelectedItem(proj)} style={{ cursor: 'pointer' }}>
+              <div key={idx} className="project-card reveal">
                 <div className="project-image">{proj.emoji}</div>
                 <div className="project-info">
                   <h3>{proj.title}</h3>
@@ -325,6 +361,30 @@ function App() {
                       <span key={tIdx}>{tag}</span>
                     ))}
                   </div>
+                </div>
+                <div className="project-actions">
+                  {proj.images?.length > 0 && (
+                    <button
+                      className="proj-btn proj-btn-demo"
+                      onClick={() => setSelectedItem(proj)}
+                      title="View UI screenshots"
+                    >
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><polyline points="8 21 12 17 16 21"/></svg>
+                      Demo
+                    </button>
+                  )}
+                  {proj.github && (
+                    <a
+                      href={proj.github}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="proj-btn proj-btn-github"
+                      title="View on GitHub"
+                    >
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61-.546-1.387-1.333-1.757-1.333-1.757-1.089-.745.083-.73.083-.73 1.205.085 1.84 1.237 1.84 1.237 1.07 1.834 2.807 1.304 3.492.997.108-.775.418-1.305.762-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.468-2.38 1.235-3.22-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.3 1.23a11.5 11.5 0 0 1 3.003-.404c1.02.005 2.047.138 3.006.404 2.29-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.233 1.91 1.233 3.22 0 4.61-2.807 5.625-5.48 5.92.43.372.823 1.102.823 2.222 0 1.606-.015 2.898-.015 3.293 0 .322.216.694.825.576C20.565 21.795 24 17.295 24 12c0-6.63-5.37-12-12-12z"/></svg>
+                      GitHub
+                    </a>
+                  )}
                 </div>
                 <div className="sweep-overlay"></div>
               </div>
@@ -354,16 +414,33 @@ function App() {
       <section id="awards" className="awards-section">
         <div className="container">
           <h2 className="section-title reveal">Recognition & Certs</h2>
-          <div className="awards-grid">
-            {awards.map((award, idx) => (
-              <div key={idx} className="award-card reveal" onClick={() => setSelectedItem(award)} style={{ cursor: 'pointer' }}>
-                <div className="award-icon">🏆</div>
-                <div className="award-info">
-                  <h3>{award.title}</h3>
-                  <p>{award.issuer} • {award.date}</p>
+          <div className="carousel-wrapper reveal">
+            <button className="carousel-btn prev" onClick={() => scroll('left')} aria-label="Previous">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+            </button>
+            
+            <div className="awards-carousel" ref={carouselRef}>
+              {awards.map((award, idx) => (
+                <div key={idx} className="award-card-new" onClick={() => setSelectedItem(award)}>
+                  <div className="award-image-container">
+                    {award.images && award.images[0] ? (
+                      <img src={award.images[0]} alt={award.title} className="award-img-thumb" />
+                    ) : (
+                      <div className="award-placeholder">🏆</div>
+                    )}
+                  </div>
+                  <div className="award-content-new">
+                    <span className="award-date-new">{award.date}</span>
+                    <h3>{award.title}</h3>
+                    <p>{award.issuer}</p>
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
+
+            <button className="carousel-btn next" onClick={() => scroll('right')} aria-label="Next">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+            </button>
           </div>
         </div>
       </section>
@@ -372,21 +449,53 @@ function App() {
       <section id="contact" className="contact-section">
         <div className="container" style={{ display: 'flex', justifyContent: 'center' }}>
           <div className="contact-card reveal">
-            <div className="ripple-avatar">
-              <div className="ripple"></div>
-              <div className="avatar-img">
-                <img src={profileImg} alt="S Kamaleshpandi" className="avatar-img-contact" />
+
+            {/* Avatar + Status */}
+            <div className="contact-top">
+              <div className="ripple-avatar">
+                <div className="ripple"></div>
+                <div className="avatar-img">
+                  <img src={profile.imageUrl || profileImg} alt="S Kamaleshpandi" className="avatar-img-contact" />
+                </div>
               </div>
+              
             </div>
-            <h2>Let's Connect</h2>
-            <div className="contact-details">
-              <p>{profile.email}</p>
-              <p>{profile.phone}</p>
+
+            {/* Heading */}
+            <h2 className="contact-heading">Let's Build Something <span className="gradient-text">Amazing</span></h2>
+            <p className="contact-sub">Open to full-time roles, freelance projects, and exciting collaborations.</p>
+
+            {/* Contact Info Rows */}
+            <div className="contact-info-rows">
+              <a href={`mailto:${profile.email}`} className="contact-info-row">
+                <span className="contact-info-icon">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+                </span>
+                <span>{profile.email}</span>
+              </a>
+              <a href={`tel:${profile.phone}`} className="contact-info-row">
+                <span className="contact-info-icon">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.5 12.5a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.41 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L7.91 9.91a16 16 0 0 0 6.18 6.18l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                </span>
+                <span>{profile.phone}</span>
+              </a>
             </div>
-            <div className="contact-links">
-              <a href={profile.linkedin} target="_blank" rel="noreferrer" className="contact-btn">LinkedIn</a>
-              <a href={profile.github} target="_blank" rel="noreferrer" className="contact-btn">GitHub</a>
+
+            {/* Divider */}
+            <div className="contact-divider"></div>
+
+            {/* Social Buttons */}
+            <div className="contact-socials">
+              <a href={profile.linkedin} target="_blank" rel="noreferrer" className="social-btn social-linkedin">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+                LinkedIn
+              </a>
+              <a href={profile.github} target="_blank" rel="noreferrer" className="social-btn social-github">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61-.546-1.387-1.333-1.757-1.333-1.757-1.089-.745.083-.73.083-.73 1.205.085 1.84 1.237 1.84 1.237 1.07 1.834 2.807 1.304 3.492.997.108-.775.418-1.305.762-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.468-2.38 1.235-3.22-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.3 1.23a11.5 11.5 0 0 1 3.003-.404c1.02.005 2.047.138 3.006.404 2.29-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.233 1.91 1.233 3.22 0 4.61-2.807 5.625-5.48 5.92.43.372.823 1.102.823 2.222 0 1.606-.015 2.898-.015 3.293 0 .322.216.694.825.576C20.565 21.795 24 17.295 24 12c0-6.63-5.37-12-12-12z"/></svg>
+                GitHub
+              </a>
             </div>
+
           </div>
         </div>
       </section>

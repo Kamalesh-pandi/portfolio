@@ -39,6 +39,8 @@ const resumeData = {
       description: "Full-stack application with Flutter and Spring Boot. Features menu browsing, cart management, and Admin Dashboard.", 
       emoji: "🍔", 
       tags: ["Flutter", "Spring Boot", "REST API"],
+      github: "https://github.com/Kamalesh-pandi/Food_Application",
+      demoUrl: "",
       images: [
         "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=800&q=80",
         "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=800&q=80"
@@ -49,6 +51,8 @@ const resumeData = {
       description: "Real-time news application with category filtering and public API integration.", 
       emoji: "📰", 
       tags: ["Flutter", "News API", "Clean UI"],
+      github: "https://github.com/Kamalesh-pandi/News_App",
+      demoUrl: "",
       images: [
         "https://images.unsplash.com/photo-1504711434969-e33886168f5c?auto=format&fit=crop&w=800&q=80"
       ]
@@ -58,6 +62,8 @@ const resumeData = {
       description: "Intuitive BMI calculator with dynamic category indication and modular structure.", 
       emoji: "⚖️", 
       tags: ["Flutter", "Dart", "UI/UX"],
+      github: "https://github.com/Kamalesh-pandi/BMI_Calculator",
+      demoUrl: "",
       images: [
         "https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&w=800&q=80"
       ]
@@ -68,13 +74,13 @@ const resumeData = {
       title: "Google Cloud Certified", 
       issuer: "Google", 
       date: "2025",
-      images: ["https://images.unsplash.com/photo-1523240715639-846174a74288?auto=format&fit=crop&w=800&q=80"]
+      images: ["https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=800&q=80"]
     },
     { 
       title: "Best Innovator Award", 
       issuer: "College Tech Fest", 
       date: "2024",
-      images: ["https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=800&q=80"]
+      images: ["https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=800&q=80"]
     }
   ]
 };

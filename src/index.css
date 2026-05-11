@@ -5,18 +5,18 @@
   --card-bg: rgba(15, 15, 20, 0.7);
   --glass: rgba(255, 255, 255, 0.03);
   --glass-border: rgba(255, 255, 255, 0.08);
-  
+
   --indigo: #6366f1;
   --pink: #ec4899;
   --cyan: #06b6d4;
   --amber: #f59e0b;
-  
+
   --text-main: #f8fafc;
   --text-dim: #94a3b8;
-  
+
   --font-heading: 'Syne', sans-serif;
   --font-body: 'DM Sans', sans-serif;
-  
+
   --transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
   --glow-indigo: 0 0 20px rgba(99, 102, 241, 0.3);
   --glow-pink: 0 0 20px rgba(236, 72, 153, 0.3);
@@ -53,9 +53,11 @@ body {
 ::-webkit-scrollbar {
   width: 8px;
 }
+
 ::-webkit-scrollbar-track {
   background: var(--bg);
 }
+
 ::-webkit-scrollbar-thumb {
   background: linear-gradient(to bottom, var(--indigo), var(--pink));
   border-radius: 10px;
@@ -75,7 +77,10 @@ body {
 }
 
 /* Base Styles */
-h1, h2, h3, h4 {
+h1,
+h2,
+h3,
+h4 {
   font-family: var(--font-heading);
   font-weight: 800;
   letter-spacing: -0.02em;
@@ -92,8 +97,7 @@ ul {
 }
 
 section {
-  padding: 100px 0;
-  min-height: 100vh;
+  padding: 60px 0;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -103,18 +107,37 @@ section {
 
 /* Animations */
 @keyframes shimmer {
-  0% { background-position: -200% center; }
-  100% { background-position: 200% center; }
+  0% {
+    background-position: -200% center;
+  }
+
+  100% {
+    background-position: 200% center;
+  }
 }
 
 @keyframes float {
-  0%, 100% { transform: translateY(0) rotateX(5deg) rotateY(-5deg); }
-  50% { transform: translateY(-20px) rotateX(-5deg) rotateY(5deg); }
+
+  0%,
+  100% {
+    transform: translateY(0) rotateX(5deg) rotateY(-5deg);
+  }
+
+  50% {
+    transform: translateY(-20px) rotateX(-5deg) rotateY(5deg);
+  }
 }
 
 @keyframes reveal {
-  from { opacity: 0; transform: translateY(30px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .reveal {
